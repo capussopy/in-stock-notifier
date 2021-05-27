@@ -1,6 +1,11 @@
-urls:
-  - https://www.the-shop.com/1
-  - https://www.the-shop.com/2
+pages:
+  - 
+    url: https://www.the-shop.com/1
+    element: button
+      identifier:
+        id: addToCartButton
+        disabled: true
+
 
 telegram:
   token: 123

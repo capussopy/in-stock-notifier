@@ -11,25 +11,26 @@ HEADERS = {
 
 class StockNotifier:
 
-    def __init__(self):
-        self.config = YMLConfig().config
-        self.telegram_bot = TelegramBot(self.config)
-
     def check(self):
-        [self.check_inventories(url) for url in self.config['urls']]
+        try:
+            self.config = YMLConfig().config
+            self.telegram_bot = TelegramBot(self.config)
+            [self.check_inventories(page) for page in self.config['pages']]
+        except Exception as e:
+            print(e)
 
-    def check_inventories(self, url):
-        page = requests.get(url, headers=HEADERS)
+    def check_inventories(self, page):
+        response = requests.get(page['url'], headers=HEADERS)
 
-        if page.status_code != 200:
-            self.telegram_bot.page_error(url, page.status_code)
+        if response.status_code != 200:
+            self.telegram_bot.page_error(page['url'], page.status_code)
         else:
-            if self.is_in_stock(page.content):
-                self.telegram_bot.in_stock(url)
+            if self.is_in_stock(response.content, page):
+                self.telegram_bot.in_stock(page['url'])
             else:
-                print('Out of Stock: {}'.format(url))
+                print('Out of Stock: {}'.format(page['url']))
 
-    def is_in_stock(self, html) -> bool:
+    def is_in_stock(self, html, page) -> bool:
         soup = BeautifulSoup(html, 'html.parser')
-        button_disabled = soup.find("button", {'id': 'addToCartButton', 'disabled': True})
+        button_disabled = soup.find(page['element'], page['identifier'])
         return button_disabled is None
