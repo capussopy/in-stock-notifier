@@ -1,0 +1,10 @@
+urls:
+  - https://www.the-shop.com/1
+  - https://www.the-shop.com/2
+
+telegram:
+  token: 123
+  chats:
+  - 1
+  - 2
+  - 3
