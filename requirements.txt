@@ -1,0 +1,4 @@
+schedule~=1.1.0
+PyYAML~=5.4.1
+requests~=2.25.1
+beautifulsoup4~=4.9.3
